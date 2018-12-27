@@ -21,7 +21,7 @@ def answer(bot, update):
     bot.send_message(chat_id=update.message.chat_id, text="No contesto a tonterias")
 
 #updater = Updater('462567247:AAEs76XLVZZeTesKJBShttI-XQASUic8yVU')
-updater = Updater('https://core.telegram.org/bots/api')
+updater = Updater('710743623:AAEaG33UZd78fTEuZqRPIKmv8Dgn4C81-LM')
 
 updater.dispatcher.add_handler(CommandHandler('hello', hello))
 updater.dispatcher.add_handler(CommandHandler('start', start))
