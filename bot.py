@@ -40,8 +40,8 @@ def show_teams(bot, update):
         for row in rows:
             bot.send_message(chat_id=update.message.chat_id, text=row)
 
-    except Exception as e:
-        print("Exeception occured:{}".format(e))
+    except Exception:
+        bot.send_message(chat_id=update.message.chat_id, text="Exception occurred in SQL Query showing teams")
     finally:
         connectionObject.close()
 
@@ -68,8 +68,8 @@ def create_tournament(bot, update):
         for row in rows:
             try:
                 original_teams.append(row['team_id'])
-            except Exception as e:
-                print("Exception appending teams")
+            except Exception:
+                bot.send_message(chat_id=update.message.chat_id, text="Exception occurred fetching field 'team_id'")
 
         for i in range(num_teams):
             try:
@@ -77,14 +77,14 @@ def create_tournament(bot, update):
                 # Append if it's not already in the list
                 if chosen_teams.__contains__(random_choice):
                     chosen_teams.append(random_choice)
-            except Exception as e:
-                print("Exception choosing teams")
+            except Exception:
+                bot.send_message(chat_id=update.message.chat_id, text="Exception occurred choosing teams")
 
         for i in chosen_teams:
             print (i)
 
-    except Exception as e:
-        print("Exeception occured in SQL Query")
+    except Exception:
+        bot.send_message(chat_id=update.message.chat_id, text="Exception occurred in SQL Query fetching teams")
     finally:
         connectionObject.close()
 
@@ -95,13 +95,14 @@ def create_tournament(bot, update):
         cursorObject = connectionObject.cursor()
 
         # SQL query string
-        sqlQuery = """CREATE TABLE """ + table_uuid + """
-            table_uuid + " (
+        sqlQuery = """CREATE TABLE """ + table_uuid + """(
             match_id varchar(25) unique not null,
             local_team_id varchar(25) unique not null,
             visitor_team_id varchar(25) unique not null,
-            goals_local int,"
-            goals_visitor int)"""
+            goals_local int,
+            goals_visitor int,
+            winner varchar(25))"""
+        bot.send_message(chat_id=update.message.chat_id, text=sqlQuery)
 
         # Execute the sqlQuery
         cursorObject.execute(sqlQuery) 
@@ -109,8 +110,8 @@ def create_tournament(bot, update):
         #Fetch all the rows
         rows = cursorObject.fetchall()
 
-    except Exception as e:
-        print("Exeception occured creating table")
+    except Exception:
+        bot.send_message(chat_id=update.message.chat_id, text="Exception occurred in SQL Query creating team table")
     finally:
         connectionObject.close()
 
