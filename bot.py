@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# import the mysql client for python
 import pymysql
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
+import secrets
+import random
 
 # Create a connection object
 dbServerName    = "127.0.0.1"
@@ -45,8 +46,73 @@ def show_teams(bot, update):
         connectionObject.close()
 
 def create_tournament(bot, update):
+    table_uuid = secrets.token_hex(16)
+    original_teams = []
+    chosen_teams = []
+    num_teams = 16
     bot.send_message(chat_id=update.message.chat_id, text="You are about to create a new tournament!!")
-    bot.send_message(chat_id=update.message.chat_id, text="Selecting random teams...")
+    bot.send_message(chat_id=update.message.chat_id, text="Selecting 16 random teams...")
+
+    try:
+        # Create a cursor object
+        cursorObject = connectionObject.cursor()
+
+        # SQL query string
+        sqlQuery = "SELECT * FROM teams"
+
+        # Execute the sqlQuery
+        cursorObject.execute(sqlQuery)
+
+        #Fetch all the rows
+        rows = cursorObject.fetchall()
+        for row in rows:
+            try:
+                original_teams.append(row['team_id'])
+            except Exception as e:
+                print("Exception appending teams")
+
+        for i in range(num_teams):
+            try:
+                random_choice = random.choice(original_teams)
+                # Append if it's not already in the list
+                if chosen_teams.__contains__(random_choice):
+                    chosen_teams.append(random_choice)
+            except Exception as e:
+                print("Exception choosing teams")
+
+        for i in chosen_teams:
+            print (i)
+
+    except Exception as e:
+        print("Exeception occured in SQL Query")
+    finally:
+        connectionObject.close()
+
+    bot.send_message(chat_id=update.message.chat_id, text="Creating tournament with UUID: " + table_uuid)
+    
+    try:
+        # Create a cursor object
+        cursorObject = connectionObject.cursor()
+
+        # SQL query string
+        sqlQuery = """CREATE TABLE """ + table_uuid + """
+            table_uuid + " (
+            match_id varchar(25) unique not null,
+            local_team_id varchar(25) unique not null,
+            visitor_team_id varchar(25) unique not null,
+            goals_local int,"
+            goals_visitor int)"""
+
+        # Execute the sqlQuery
+        cursorObject.execute(sqlQuery) 
+
+        #Fetch all the rows
+        rows = cursorObject.fetchall()
+
+    except Exception as e:
+        print("Exeception occured creating table")
+    finally:
+        connectionObject.close()
 
 def update_next_match(bot, update):
     abs
