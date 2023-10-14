@@ -1,16 +1,16 @@
 # Use the official Alma Linux image as the base image
-FROM almalinux:9.2
+FROM python:latest
 
 # Install necessary dependencies
-RUN yum install -y python311 python311-devel python311-pip && \
-    yum clean all && \
-    rm -rf /var/cache/yum
+# RUN yum install -y python3.11 python3.11-devel python3.11-pip openssl openssl-devel && \
+#     yum clean all && \
+#     rm -rf /var/cache/yum
 
 # Upgrade pip
-RUN python3.9 -m pip install --upgrade pip
+RUN python3.12 -m pip install --upgrade pip
 
 # Install required Python packages
-RUN pip3 install pymysql python-telegram-bot secrets
+RUN pip3 install pymysql pyopenssl python-telegram-bot
 
 # Set the working directory
 WORKDIR /app
@@ -19,7 +19,7 @@ WORKDIR /app
 COPY bot.py /app/
 
 # Expose any required ports (if your bot uses a specific port)
-# EXPOSE 8080
+EXPOSE 443
 
 # Start the bot.py script when the container starts
-CMD ["python3.11", "bot.py"]
+CMD ["python3.12", "bot.py"]

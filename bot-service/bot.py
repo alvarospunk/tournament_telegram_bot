@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 import pymysql
-from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
-import secrets
+from telegram.ext import Updater, CommandHandler, MessageHandler, filters
 import random
 import pdb
 
