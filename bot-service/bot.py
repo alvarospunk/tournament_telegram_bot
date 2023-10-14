@@ -56,10 +56,10 @@ def show_teams(bot, update):
         cursorObject = connectionObject.cursor()
 
         # SQL query string
-        sqlQuery = "SELECT * from teams"   
+        sqlQuery = "SELECT * from teams"
 
         # Execute the sqlQuery
-        cursorObject.execute(sqlQuery) 
+        cursorObject.execute(sqlQuery)
 
         #Fetch all the rows
         rows = cursorObject.fetchall()
